@@ -214,3 +214,20 @@ $$ \begin{aligned}
 V_{t+1}(s) &= V_t(s) + \alpha \delta_{t+1} E_{t+1}(s) \\
 E_{t+1}(s) &= \lambda \gamma E_t(s) + \chi(S_t = s)
 \end{aligned} $$
+
+<!-- slide -->
+## まとめ
+
+<!-- slide -->
+### 更新式
+
+  $$V_{t+1}(s) = V_t(s) + \alpha_t (\tilde{G}_t - V_t(S_t)) \chi(S_k = s)$$
+
+### 各手法
+
+| 手法 | $\tilde{G}_t$ |
+| ------- | ------------- |
+| MC | $G_t = \sum_{l=1}^{T-t} \gamma^{l-1}R_{t+l}$ |
+| $1$-TD | $G_t^{(1)} = R_{t+1} + \gamma V_t(S_{t+1})$ |
+| $n$-TD | $G_t^{(n)} = \sum_{l=1}^{n} \gamma^{l-1}R_{t+l} + \gamma^n V_t (S_{t+n})$ |
+| TD($\lambda$) | $G_t^{\lambda} = (1-\lambda) \sum_{n=1}^{T-t} \lambda^{n-1}G_t^{(n)} + \lambda^{T-t} G_t$ |
