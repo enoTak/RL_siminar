@@ -10,15 +10,10 @@
 <!-- slide -->
 ### Q学習
 
-* 
-  * 
-
 <!-- slide -->
 ### 方策勾配法
 
 <!-- slide -->
 ### Actor-Critic法
-
 * Actorのモデル化
-  * 
-*　Criticのモデル化
+* Criticのモデル化
