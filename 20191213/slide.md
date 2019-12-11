@@ -46,6 +46,28 @@
 ### 価値関数推定のアプローチ
 
 <!-- slide -->
+### SARSA
+* 更新アルゴリズムは以下のとおり
+    * $\delta_{t + 1} = R_{t + 1} + \gamma Q_t(S_{t+1}, A_{t+1}) -  Q_t(S_{t}, A_{t})$
+    * $Q_{t+1}(s,a) = Q_{t}(s,a) +  \alpha \delta_{t + 1} \bold{1}(S_{t} = s, A_{t} = a)$
+* 導出については$V_t(s)$の更新式を導出したのと同じ議論を
+    * $Q_{t+1}(s,a) = \frac{1}{N_{t+1}(s,a)}\sum_{k = 0}^{t} G_k \bold{1}(S_{t} = s, A_{t} = a)$
+    * $N_{t+1}(s,a) = \sum_{k = 0}^{t} \bold{1}(S_{t} = s, A_{t} = a)$
+について行えばいい。
+
+<!-- slide -->
+### SARSAの一般化
+* $V_t(s)$の議論と同様にしてn-step学習、$TD(\lambda)$法に拡張可能
+* SARSA$(\lambda)$の更新式は下記で与えられる
+    * $Q_{t+1}(s,a) = Q_{t}(s,a) +  \alpha \delta_{t + 1} E_{t+1}(s, a)$
+    * $E_{t+1}(s, a) = \lambda \gamma E_{t+1}(s, a) +  \bold{1}(S_{t} = s, A_{t} = a)$
+* SARSAは実際の状態、行動のサンプル列をそのまま更新に使用しているのでPolicy-On学習といわれる
+
+<!-- slide -->
+### Q学習:Policy-Off学習
+
+
+<!-- slide -->
 ### Actor-Critic法
 * Actorのモデル化
 * Criticのモデル化
