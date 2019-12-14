@@ -48,7 +48,7 @@ https://qiita.com/sugulu/items/3c7d6cbe600d455e853b
 * Boltzman exploration
     * 方策を下記に基づいて更新する
     $\pi(a|s) = \frac{\exp(\beta Q(s,a))}{\sum_{a^{\prime}} \exp(\beta Q(s,a^{\prime}))}$
-    * $\beta$ $\rightarrow$ $\infty$ で$\epsilon$-greedy法に一致する
+    * $\beta$ $\rightarrow$ $\infty$ でgreedy法に一致する
 
 <!-- slide -->
 ### 価値関数推定のアプローチ
