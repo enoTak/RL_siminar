@@ -11,7 +11,6 @@
 |---|---|---|
 |状態($s$)  |振り子角度・角速度  |3-dim  |
 |行動($a$)  |振り子に作用する力 |-2~2 |
-|報酬($r$)  |同時刻における振り子の状態・行動から計算 | -16.2736 ~ 0|
 |終了条件 |最大ステップ数に到達したか |True/False|
 
 * 状態: $s=(\cos \theta, \sin \theta, \dot \theta)$
@@ -36,22 +35,46 @@
 <!-- slide -->
 ### 工夫1: ネットワーク構造
 
-* xxx
+* よくあるやり方
+  * 関数$(s, a) \mapsto Q_t(s, a)$を学習
+  * 要は各$(s, a)$毎の値を学習
+  * このあとやりたい計算は$\max_a Q_t(s, a)$なので各$a$毎に近似するのはコスト大
+* なので関数$s \mapsto (Q_t(s, a))_{a \in A}$を学習する!
+* $s \mapsto \max_a Q_t(s, a)$を学習すればメモリ削減できそうだが...?
+→$\arg \max Q_t(s, a)$とか考えたいからNG
 
 <!-- slide -->
 ### 工夫2: Experience replay
 
-* xxx
+* パラメータ更新の際に生じる相関・バイアスをのぞく
+* $(s, a, r, s')$の系列は$s$と相関が強い
+  $s'$と$s$は近い状態にあるので
+* $(s, a, r, s')$の過去データをプールしておき,
+  パラメータ更新時はプールしてあるデータからサンプリングして利用
+* 相関の少ないデータでの更新になるので、学習が収束しやすい
+
+#### Rem: 方策オフ型になってしまう
 
 <!-- slide -->
 ### 工夫3: Reward clipping
 
-* xxx
+* Q関数の推定に報酬の値が影響する
+* たまたま大きな報酬値が入ってしまうと、それに引きずられてしまう(収束が遅くなる)
+* 成功したら報酬1, しなかったら報酬0と丸めてしまう
 
 <!-- slide -->
 ### 工夫4: Double network
 
-* xxx
+* Q学習でのQ関数の目標値:
+ $q_*(s, a)$の代わりに$\max_{a \ \in A(s)} Q_t(s, a)$
+* $Q_t(s, a)$の上方向の誤差影響が出やすい
+  (目標値が高めに見積もられる)
+
+* 行動選択のためのネットワーク(main)とQ関数計算のためのネットワーク(target)を別にする方法
+
+* TD誤差計算において$$a_{t+1} = \arg \max_{a'} Q_{main}(s_{t+1}, a'), \\
+target = R_{t+1} + \gamma Q_{target}(s_{t+1}, a_{t+1})$$で計算
+* targetをmainと定期的に同期する
 
 <!-- slide -->
 ### 全体でのアルゴリズム
@@ -75,19 +98,18 @@
 <!-- slide -->
 ### Actor
 
-* xxx
+* 行動変数$a$を2値化
+* policyは$$\pi (a | s, \theta) = \frac{\exp\xi(s, a| \theta)}{\sum_{a'} \exp\xi(s, a'| \theta)}$$でモデル化
+* $xi$をNNで推定
 
 <!-- slide -->
 ### Critic
 
-* xxx
+* Criticはadvantage関数をActorに渡す
+* advantage関数 $\approx$ TD誤差なので
+  Criticは価値関数$V(s)$をモデル化すればよい
+
+* 価値関数と方策関数の引数はどちらも同じ$s$なのでCriticの出力を両方($V, a_1, a_2 (a_1 + a_2 = 1)$)としてもよい
 
 <!-- slide -->
 ## 実装例(DQN/Actor-Critic)
-
-
-Go to this URL in a browser: https://accounts.google.com/o/oauth2/auth?client_id=947318989803-6bn6qk8qdgf4n4g3pfee6491hc0brc4i.apps.googleusercontent.com&redirect_uri=urn%3aietf%3awg%3aoauth%3a2.0%3aoob&response_type=code&scope=email%20https%3a%2f%2fwww.googleapis.com%2fauth%2fdocs.test%20https%3a%2f%2fwww.googleapis.com%2fauth%2fdrive%20https%3a%2f%2fwww.googleapis.com%2fauth%2fdrive.photos.readonly%20https%3a%2f%2fwww.googleapis.com%2fauth%2fpeopleapi.readonly
-
-Enter your authorization code:
-··········
-Mounted at /content/drive
